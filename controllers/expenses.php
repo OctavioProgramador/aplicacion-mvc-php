@@ -116,9 +116,51 @@ class Expenses extends SessionController
     $categoryIds = $this->getCategoriesId();
     $categoryNames = $this->getCategoryList();
     $categoryColors = $this->getCategoryColorList();
-    $joinModel = new JoinExpensesCategoriesModel();
-    $expenses = $joinModel->getAll($this->user->getId());
+
+    array_unshift($categoryNames,'mes');
+    array_unshift($categoryColors,'categories');
+
+    $months = $this->getDateList();
+    for ($i=0; $i < count($months); $i++) { 
+      $item = array($months[$i]);
+      for ($j=0; $j < count($categoryIds); $j++) { 
+        $total = $this->getTotalByMonthAndCategory($months[$i],$categoryIds[$j]);
+        array_push($item, $total);
+      }
+      array_push($res, $item);
+    }
+    array_unshift($res,$categoryNames);
+    array_unshift($res,$categoryColors);
+    echo json_encode($res);
   }
+
+  private function getTotalByMonthAndCategory($date, $categoryid)
+  {
+    $iduser = $this->user->getId();
+    //$expenses = new ExpensesModel();
+    //$total = $expenses->getTotalByMonthAndCategory($date, $categoryid, $iduser);
+    $total = $this->model->getTotalByMonthAndCategory($date, $categoryid, $iduser);
+    if ($total == NULL) {
+      $total = 0;
+    }
+    return $total;
+  }
+
+  function delete($params){
+    if ($params == NULL) {
+      $this->redirect('expenses', []); //TODO: error
+    }
+    $id = $params[0];
+    $res = $this->model->delete($id);
+
+    if ($res) {
+      $this->redirect('expenses', []); //TODO success
+    }
+    else{
+      $this->redirect('expenses', []); //TODO error
+    }
+  }
+
 }
 
 
