@@ -51,6 +51,7 @@ class UserModel extends Model implements IModel{
         $item->setBudget($p['budget']);
         $item->setPassword($p['password']);
         $item->setUsername($p['username']);
+        $item->setName($p['name']);
         array_push($items, $item);
       }
       return $items;
@@ -62,13 +63,14 @@ class UserModel extends Model implements IModel{
   function get($id){
     $items = [];
     try{
-      $query = $this->prepare('SELECT * FROM USERS WHERE id = :id');
+      $query = $this->prepare('SELECT * FROM users WHERE id = :id');
       $query->execute([
         'id' => $id
       ]);
       $user = $query->fetch(PDO::FETCH_ASSOC);
       $this->setId($user['id']);
       $this->setRole($user['role']);
+      $this->setName($user['name']);
       $this->setPhoto($user['photo']);
       $this->setBudget($user['budget']);
       $this->setPassword($user['password']);
@@ -125,6 +127,7 @@ class UserModel extends Model implements IModel{
 
   public function setId($id){               $this->id = $id;}
   public function setRole($role){           $this->role = $role;}
+  public function setName($name){           $this->name = $name;}
   public function setPhoto($photo){         $this->photo = $photo;}
   public function setBudget($budget){       $this->budget = $budget;}
   public function setUsername($username){   $this->username = $username;}
@@ -133,6 +136,7 @@ class UserModel extends Model implements IModel{
   }
 
   public function getId(){        return $this->id; }
+  public function getName(){      return $this->name;}
   public function getRole(){      return $this->role; }
   public function getPhoto(){     return $this->photo; }
   public function getBudget(){    return $this->budget; }
