@@ -50,7 +50,7 @@
       {
         $params = '?' . $params;
       }
-      header('Location: ' . constant('URL') . '/' . $route . $params);
+      header('Location: ' . constant('URL') .  $route . $params);
     }
   }
   

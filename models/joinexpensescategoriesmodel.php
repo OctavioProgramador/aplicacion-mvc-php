@@ -16,7 +16,7 @@ class JoinExpensesCategoriesModel extends Model
   {
     $items = [];
     try {
-      $query = $this->prepare('SELECT expenses.is as expense_id, title, category_id, amount, date, 
+      $query = $this->prepare('SELECT expenses.id as expense_id, title, category_id, amount, date, 
   id_user, categories.id, name, color FROM expenses INNER JOIN categories WHERE expenses.category_id 
  = categories.id AND expenses.id_user = :userid ORDER BY date');
       $query->execute([
@@ -29,6 +29,7 @@ class JoinExpensesCategoriesModel extends Model
         }
       return $items;
     } catch(PDOException $e) {
+        error_log('JoinExpensesCategoriesModel::getAll -> '. $e);
       return false;
     }
   }
@@ -49,11 +50,11 @@ class JoinExpensesCategoriesModel extends Model
     $array = [];
     $array['expense_id'] = $this->expenseId; 
     $array['title']      = $this->title; 
-    $array['category_id']= $this->categoryI; 
+    $array['category_id']= $this->categoryId; 
     $array['amount']     = $this->amount; 
     $array['date']       = $this->date; 
     $array['id_user']    = $this->userId; 
-    $array['name']       = $this->nameCateg; 
+    $array['name']       = $this->nameCategory; 
     $array['color']      = $this->color; 
     return $array;
   }
@@ -80,6 +81,7 @@ class JoinExpensesCategoriesModel extends Model
       }
       return $total;
     } catch (PDOException $e) {
+    error_log('JoinExpensesCategoriesModel::getTotalByMonthAndCategory -> '. $e);
       return 0;  
     }
   }

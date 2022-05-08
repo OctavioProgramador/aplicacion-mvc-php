@@ -10,7 +10,7 @@ class CategoriesModel extends Model implements IModel
   }      
   public function save(){
     try {
-      $query = $this->prepare('INSERT INTO CATEGORIES (name, color) VALUES(:name,:color)');
+      $query = $this->prepare('INSERT INTO categories (name, color) VALUES(:name,:color)');
       $query->execute([
         'name'=>$this->name,
         'color'=>$this->color
@@ -18,6 +18,7 @@ class CategoriesModel extends Model implements IModel
       if($query->rowCount()) return true;
       return false;
     } catch (PDOException $e) {
+        error_log('CategoriesModel::save -> ' . $e);
       return false;
     }
   }
@@ -32,6 +33,7 @@ class CategoriesModel extends Model implements IModel
       }
       return $items;
     } catch (PDOException $e) {
+        error_log('CategoriesModel::getAll -> ' . $e);
       return NULL;
     }
   }
@@ -43,6 +45,7 @@ class CategoriesModel extends Model implements IModel
       $this->from($category);
       return $this;
     } catch (PDOException $e) {
+        error_log('CategoriesModel::get -> ' . $e);
       return NULL;
     }
   }
@@ -52,6 +55,7 @@ class CategoriesModel extends Model implements IModel
       $query->execute(['id' => $id]);
       return true;
     } catch (PDOException $e) {
+        error_log('CategoriesModel::delete -> ' . $e);
       return false;
     }
   }
@@ -66,6 +70,7 @@ class CategoriesModel extends Model implements IModel
       $category = $query->fetch(PDO::FETCH_ASSOC);
       return TRUE;
     } catch (PDOException $e) {
+        error_log('CategoriesModel::update -> ' . $e);
       return NULL;
     }
   }
@@ -86,6 +91,7 @@ class CategoriesModel extends Model implements IModel
       } 
       return false;
     } catch (PDOException $e) {
+        error_log('CategoriesModel::exists -> ' . $e);
       return false;
     }
 
@@ -115,10 +121,5 @@ class CategoriesModel extends Model implements IModel
   {
     $this->color = $value;
   }
-
-
 }
-
-
-
 ?>

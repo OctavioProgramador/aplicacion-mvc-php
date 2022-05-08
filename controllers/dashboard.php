@@ -1,4 +1,6 @@
 <?php
+require_once 'models/expensesmodel.php';
+require_once 'models/categoriesmodel.php';
 class Dashboard extends SessionController{
 
   private $user;
@@ -16,7 +18,7 @@ class Dashboard extends SessionController{
     $categories = $this->getCategories();
     $this->view->render('dashboard/index',[
       'user' => $this->user,
-      'expesnses' => $expesnses,
+      'expenses' => $expesnses,
       'totalAmountThisMonth' => $totalThisMonth,
       'maxExpensesThisMonth' => $maxExpensesThisMonth,
       'categories' => $categories

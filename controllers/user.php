@@ -16,7 +16,7 @@ class User extends SessionController
   }
 
   function updateBudget(){
-    if (!$this->existPOST('budget')) {
+    if (!$this->existPOST(['budget'])) {
       $this->redirect('user',[]); //TODO:
       return;
     }
@@ -32,7 +32,7 @@ class User extends SessionController
   }
 
   function updateName(){
-    if (!$this->existPOST('name')) {
+    if (!$this->existPOST(['name'])) {
       $this->redirect('user',[]); //TODO:
       return;
     }
@@ -87,13 +87,13 @@ class User extends SessionController
       return;
     }
     $photo = $_FILES['photo'];
-    $targetDir = 'public/img/photos';
+    $targetDir = 'public/img/photos/';
     $extension = explode('.', $photo['name']);
     $filename = $extension[sizeof($extension)-2];
     $ext = $extension[sizeof($extension)-1];
     $hash = md5(Date('Ymdgi').$filename).'.'. $ext;
     $targetFile = $targetDir . $hash;
-    $uploadOk = 1;
+    $uploadOk = true;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
     
     $check = getimagesize($photo['tmp_name']);
@@ -108,7 +108,9 @@ class User extends SessionController
       return;
     }else{
       if (move_uploaded_file($photo['tmp_name'],$targetFile)) {
-        $this->model->updatePhoto($hash,$this->user->getId());
+        error_log("USER::->updatePhoto() -> \$hash = ". $hash);
+        $this->user->setPhoto($hash);
+        $this->user->update();
         $this->redirect('user',[]); //TODO:
         return;
       }else{

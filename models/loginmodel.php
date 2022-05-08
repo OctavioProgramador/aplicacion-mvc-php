@@ -1,8 +1,8 @@
 <?php
 	require_once 'models/usermodel.php';
   class LoginModel extends Model {
-    function __constructor(){
-      parent::__constructor();
+    function __construct(){
+      parent::__construct();
     }
 
     function login($username, $password){
@@ -17,7 +17,7 @@
 				    error_log('LOGINMODEL::Login -> Success');
 				    return $user;
 			    }else{
-				    error_log('LOGINMODEL::Login -> Password no es igual');
+            error_log('LOGINMODEL::Login -> Password ' . $password . ' no es igual');
 				    return NULL;
 			    }
 		    }

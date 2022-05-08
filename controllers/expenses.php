@@ -1,6 +1,8 @@
 <?php
 require_once 'models/expensesmodel.php';
-require_once 'models/cateogiesmode.php';
+require_once 'models/categoriesmodel.php';
+require_once 'models/joinexpensescategoriesmodel.php';
+
 class Expenses extends SessionController 
 {
   private $user;
@@ -12,7 +14,9 @@ class Expenses extends SessionController
   function render()
   {
     $this->view->render('expenses/index',[
-      'user' => $this->user
+      'user' => $this->user,
+        'dates' => $this->getDateList(),
+        'categories' => $this->getCategoryList()
     ]);
   }
 
@@ -66,12 +70,18 @@ class Expenses extends SessionController
     foreach ($expenses as $expense) {
       array_push($months,substr($expense->getDate(),0,7));
     }
+
     $months = array_values(array_unique($months));
+        foreach ($months as $month ) {
+            array_push($res,$month); 
+        }
+        /*
     if(count($months) >3 ){
       array_push($res,array_pop($months));
       array_push($res,array_pop($months));
       array_push($res,array_pop($months));
     }
+*/
     return $res;
   }
 
@@ -149,15 +159,19 @@ class Expenses extends SessionController
   function delete($params){
     if ($params == NULL) {
       $this->redirect('expenses', []); //TODO: error
+        error_log('Expenses::delete -> $params es igual a null');
     }
     $id = $params[0];
+        error_log('Expenses::delete id ->' . $id);
     $res = $this->model->delete($id);
 
     if ($res) {
       $this->redirect('expenses', []); //TODO success
+        error_log('Expenses::delete -> eliminado' . $id);
     }
     else{
       $this->redirect('expenses', []); //TODO error
+        error_log('Expenses::delete -> error');
     }
   }
 

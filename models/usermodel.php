@@ -42,7 +42,7 @@ class UserModel extends Model implements IModel{
   function getAll(){
     $items = [];
     try{
-      $query = $this->query('SELECT * FROM USERS');
+      $query = $this->query('SELECT * FROM users');
       while($p = $query->fetch(PDO::FETCH_ASSOC)){
         $item = new UserModel();
         $item->setId($p['id']);
@@ -99,7 +99,7 @@ class UserModel extends Model implements IModel{
   function update(){
     $items = [];
     try{
-      $query = $this->prepare('UPDATE users SET username = :username, password = :password, budget = :budget, photo = :photo, name = :name WHERE id = :id');
+      $query = $this->prepare('UPDATE users SET username = :username, password = :password, role = :role, budget = :budget, photo = :photo, name = :name WHERE id = :id');
       $query->execute([
         'id' => $this->id,
         'username'        => $this->username,

@@ -1,5 +1,5 @@
 <?php
-define('URL', 'http://localhost:80/expenseapp');
+define('URL', 'http://localhost:80/expenseapp/');
 
 define('HOST', 'localhost');
 define('DB', 'expenseapp');
