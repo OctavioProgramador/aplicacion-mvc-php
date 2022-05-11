@@ -49,7 +49,7 @@ class UserModel extends Model implements IModel{
         $item->setRole($p['role']);
         $item->setPhoto($p['photo']);
         $item->setBudget($p['budget']);
-        $item->setPassword($p['password']);
+        $item->setPassword($p['password'], false);
         $item->setUsername($p['username']);
         $item->setName($p['name']);
         array_push($items, $item);
@@ -73,7 +73,7 @@ class UserModel extends Model implements IModel{
       $this->setName($user['name']);
       $this->setPhoto($user['photo']);
       $this->setBudget($user['budget']);
-      $this->setPassword($user['password']);
+      $this->setPassword($user['password'], false);
       $this->setUsername($user['username']);
       return $this;
 
@@ -131,8 +131,12 @@ class UserModel extends Model implements IModel{
   public function setPhoto($photo){         $this->photo = $photo;}
   public function setBudget($budget){       $this->budget = $budget;}
   public function setUsername($username){   $this->username = $username;}
-  public function setPassword($password){
+  public function setPassword($password, $hashed=true){
+        if($hashed){
     $this->password = $this->getHashedPassword($password);
+        }else{
+            $this->password=$password;
+        }
   }
 
   public function getId(){        return $this->id; }

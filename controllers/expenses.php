@@ -23,12 +23,12 @@ class Expenses extends SessionController
   function newExpense(){
     if(!$this->existPOST(['title', 'amount', 'category', 'date']))
     {
-      $this->redirect('dashboard', []); //TODO: error
+      $this->redirect('dashboard', ['error' => ErrorMessages::ERROR_EXPENSES_NEWEXPENSE_EMPTY]);
       return;
     }
     if($this->user == NULL)
     {
-      $this->redirect('dashboard',[]); //TODO:error
+      $this->redirect('dashboard',['error' => ErrorMessages::ERROR_EXPENSES_NEWEXPENSE]); 
       return;
     }
     $expense = new ExpensesModel();
@@ -39,7 +39,7 @@ class Expenses extends SessionController
     $expense->setUserId($this->user->getId());
 
     $expense->save();
-    $this->redirect('dashboard',[]); // TODO:success
+    $this->redirect('dashboard',['success' => SuccessMessages::SUCCESS_EXPENSES_NEWEXPENSE]); // TODO:success
   }
 
   function create(){
@@ -158,7 +158,7 @@ class Expenses extends SessionController
 
   function delete($params){
     if ($params == NULL) {
-      $this->redirect('expenses', []); //TODO: error
+      $this->redirect('expenses', ['error' => ErrorMessages::ERROR_EXPENSES_DELETE]);
         error_log('Expenses::delete -> $params es igual a null');
     }
     $id = $params[0];
@@ -166,11 +166,11 @@ class Expenses extends SessionController
     $res = $this->model->delete($id);
 
     if ($res) {
-      $this->redirect('expenses', []); //TODO success
+      $this->redirect('expenses', ['success' => SuccessMessages::SUCCESS_EXPENSES_DELETE]);
         error_log('Expenses::delete -> eliminado' . $id);
     }
     else{
-      $this->redirect('expenses', []); //TODO error
+      $this->redirect('expenses', ['error' => ErrorMessages::ERROR_EXPENSES_DELETE]); 
         error_log('Expenses::delete -> error');
     }
   }

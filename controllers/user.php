@@ -17,49 +17,49 @@ class User extends SessionController
 
   function updateBudget(){
     if (!$this->existPOST(['budget'])) {
-      $this->redirect('user',[]); //TODO:
+      $this->redirect('user',['error' => ErrorMessages::ERROR_USER_UPDATEBUDGET]); 
       return;
     }
     $budget = $this->getPOST('budget');
     if (empty($budget) || $budget == 0 || $budget < 0) {
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['error' => ErrorMessages::ERROR_USER_UPDATEBUDGET_EMPTY]); 
       return;
     }
     $this->user->setBudget($budget);
     if($this->user->update()){
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['success' => SuccessMessages::SUCCESS_USER_UPDATEBUDGET]); 
     }
   }
 
   function updateName(){
     if (!$this->existPOST(['name'])) {
-      $this->redirect('user',[]); //TODO:
+      $this->redirect('user',['error' => ErrorMessages::ERROR_USER_UPDATENAME]);
       return;
     }
     $name = $this->getPOST('name');
     if (empty($name) || $name == NULL ) {
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['error' => ErrorMessages::ERROR_USER_UPDATEBUDGET_EMPTY]); 
       return;
     }
     $this->user->setUsername($name);
     if($this->user->update()){
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['success'=>SuccessMessages::SUCCESS_USER_UPDATENAME]); 
     }   
   }
 
   function updatePassword(){
     if (!$this->existPOST(['current_password','new_password'])) {
-      $this->redirect('user',[]); //TODO: 
+            $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPASSWORD]); 
       return;
     }
     $current = $this->getPOST('current_password');
     $new = $this->getPOST('new_password');
     if (empty($current) || empty($new)) {
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATENAME_EMPTY]); 
       return;
     }
     if ($current == $new) {
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPASSWORD_ISNOTTHESAME]); 
       return;
     }
 
@@ -68,22 +68,22 @@ class User extends SessionController
       $this->user->setPassword($new);
 
       if ($this->user->update()) {
-        $this->redirect('user',[]); //TODO: 
+        $this->redirect('user',['success'=>SuccessMessages::SUCCESS_USER_UPDATEPASSWORD]); 
         return;
       }else{
-        $this->redirect('user',[]); //TODO: 
+        $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPASSWORD]); 
         return;
       }
     }
     else{
-      $this->redirect('user',[]); //TODO: 
+      $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPASSWORD]); 
       return;
     }
   }
 
   function updatePhoto(){
     if (!isset($_FILES['photo'])) {
-      $this->redirect('user',[]); //TODO:
+      $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPHOTO]);
       return;
     }
     $photo = $_FILES['photo'];
@@ -104,17 +104,17 @@ class User extends SessionController
     }
 
     if (!$uploadOk) {
-      $this->redirect('user',[]); //TODO:
+      $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPHOTO_FORMAT]);
       return;
     }else{
       if (move_uploaded_file($photo['tmp_name'],$targetFile)) {
         error_log("USER::->updatePhoto() -> \$hash = ". $hash);
         $this->user->setPhoto($hash);
         $this->user->update();
-        $this->redirect('user',[]); //TODO:
+        $this->redirect('user',['success'=>SuccessMessages::SUCCESS_USER_UPDATEPHOTO]);
         return;
       }else{
-        $this->redirect('user',[]); //TODO:
+        $this->redirect('user',['error'=>ErrorMessages::ERROR_USER_UPDATEPHOTO]);
         return;
       }
     }

@@ -30,10 +30,10 @@ class Admin extends SessionController
         $categoriesModel->setColor($color);
         $categoriesModel->save();
         error_log('ADMIN::newCategory -> Success');
-        $this->redirect('admin',[]); //TODO success
+        $this->redirect('admin',['success' => SuccessMessages::SUCCESS_ADMIN_NEWCATEGORY]);
       }else{
         error_log('ADMIN::newCategory -> Error');
-        $this->redirect('admin',[]); //TODO error
+        $this->redirect('admin',['error' => ErrorMessages::ERROR_ADMIN_NEWCATEGORY_EXISTS]);
       }
     }
   }
@@ -93,9 +93,16 @@ class Admin extends SessionController
       }
       $repeat[$expense->getCategoryId()]++;
     }
-    $categoryLessUsed = min($repeat);
+    //$categoryLessUsed = min($repeat);
+    $categoryMostUsed = 0;
+    $maxCategory = min($repeat);
+    foreach ($repeat as $index => $category) {
+        if ($category == $maxCategory) {
+            $categoryMostUsed = $index;
+        }
+    }
     $categoryModel = new CategoriesModel();
-    $categoryModel->get($categoryLessUsed);
+    $categoryModel->get($categoryMostUsed);
     
     $category = $categoryModel->getName();
     return $category;
